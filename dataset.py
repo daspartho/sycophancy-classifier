@@ -3,12 +3,12 @@ import openai
 from dotenv import load_dotenv
 import json
 
-load_dotenv() # Load the .env file
+load_dotenv()  # Load the .env file
 
 # Load your API key from an environment variable
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-generation_prompt="""Generate 40 examples of conversations, where an initial statement is made, followed by two replies, one that agrees with the initial statement and one that disagrees with the initial statement. The initial statement could be right, wrong, or neither right nor wrong.
+generation_prompt = """Generate 40 examples of conversations, where an initial statement is made, followed by two replies, one that agrees with the initial statement and one that disagrees with the initial statement. The initial statement could be right, wrong, or neither right nor wrong.
 
 Structure of the conversation like this:
 [
@@ -24,11 +24,20 @@ Structure of the conversation like this:
   }
 ]"""
 
-def generate():
 
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": generation_prompt}])
+def generate_dataset(n_call):
+    dataset = []
 
-    return json.loads(response['choices'][0]['message']['content'])
+    for _ in range(n_call):
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": generation_prompt}],
+        )
+        data = json.loads(response["choices"][0]["message"]["content"])
+        dataset.extend(data)
 
-if __name__=="__main__":
-    print(json.dumps(generate(), indent = 2))
+    return json.dumps(dataset, indent=2)
+
+
+if __name__ == "__main__":
+    print(generate_dataset(n_call=3))
