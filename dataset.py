@@ -79,5 +79,5 @@ def upload_dataset(filename="dataset.json", repo_id="daspartho/agree_disagree"):
 
 
 if __name__ == "__main__":
-    generate_dataset(n_call=3)
+    generate_dataset(n_call=25)
     upload_dataset()
