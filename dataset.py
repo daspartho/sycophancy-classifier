@@ -27,9 +27,11 @@ Structure of the conversation like this:
 
 
 def generate_dataset(n_call, filename="dataset.json"):
+    print("generating dataset...")
     dataset = []
 
-    for _ in range(n_call):
+    for i in range(n_call):
+        print(f"api call {i+1}/{n_call}")
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": generation_prompt}],
@@ -37,11 +39,13 @@ def generate_dataset(n_call, filename="dataset.json"):
         data = json.loads(response["choices"][0]["message"]["content"])
         dataset.extend(data)
 
+    print(f"writing dataset to {filename}...")
     with open(filename, "w") as f:
         json.dump(dataset, f, indent=2)
 
 
 def upload_dataset(filename="dataset.json", repo_id="daspartho/agree_disagree"):
+    print(f"uploading {filename} to {repo_id}...")
     dataset = load_dataset("json", data_files=filename)
     dataset.push_to_hub(repo_id)
 
