@@ -25,7 +25,7 @@ Structure of the conversation like this:
 ]"""
 
 
-def generate_dataset(n_call):
+def generate_dataset(n_call, filename="dataset.json"):
     dataset = []
 
     for _ in range(n_call):
@@ -36,8 +36,11 @@ def generate_dataset(n_call):
         data = json.loads(response["choices"][0]["message"]["content"])
         dataset.extend(data)
 
-    return json.dumps(dataset, indent=2)
+    with open(filename, "w") as f:
+        json.dump(dataset, f, indent=2)
+
+    return None
 
 
 if __name__ == "__main__":
-    print(generate_dataset(n_call=3))
+    generate_dataset(n_call=3)
