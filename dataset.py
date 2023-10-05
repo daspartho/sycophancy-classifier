@@ -2,6 +2,7 @@ import os
 import openai
 from dotenv import load_dotenv
 import json
+from datasets import load_dataset
 
 load_dotenv()  # Load the .env file
 
@@ -39,8 +40,12 @@ def generate_dataset(n_call, filename="dataset.json"):
     with open(filename, "w") as f:
         json.dump(dataset, f, indent=2)
 
-    return None
+
+def upload_dataset(filename="dataset.json", repo_id="daspartho/agree_disagree"):
+    dataset = load_dataset("json", data_files=filename)
+    dataset.push_to_hub(repo_id)
 
 
 if __name__ == "__main__":
     generate_dataset(n_call=3)
+    upload_dataset()
