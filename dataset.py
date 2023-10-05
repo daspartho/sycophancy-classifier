@@ -26,6 +26,28 @@ Structure of the conversation like this:
 ]"""
 
 
+def format_dataset(dataset):
+    print("formatting dataset...")
+    formatted_dataset = []
+
+    for item in dataset:
+        agree_obj = {
+            "statement": item["statement"],
+            "reply": item["agree"],
+            "sentiment": 1,
+        }
+        formatted_dataset.append(agree_obj)
+
+        disagree_obj = {
+            "statement": item["statement"],
+            "reply": item["disagree"],
+            "sentiment": 0,
+        }
+        formatted_dataset.append(disagree_obj)
+
+    return formatted_dataset
+
+
 def generate_dataset(n_call, filename="dataset.json"):
     print("generating dataset...")
     dataset = []
@@ -43,9 +65,11 @@ def generate_dataset(n_call, filename="dataset.json"):
             continue
         dataset.extend(data)
 
+    formatted_dataset = format_dataset(dataset)
+
     print(f"writing dataset to {filename}...")
     with open(filename, "w") as f:
-        json.dump(dataset, f, indent=2)
+        json.dump(formatted_dataset, f, indent=2)
 
 
 def upload_dataset(filename="dataset.json", repo_id="daspartho/agree_disagree"):
