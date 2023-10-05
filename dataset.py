@@ -36,7 +36,11 @@ def generate_dataset(n_call, filename="dataset.json"):
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": generation_prompt}],
         )
-        data = json.loads(response["choices"][0]["message"]["content"])
+        try:
+            data = json.loads(response["choices"][0]["message"]["content"])
+        except:
+            print("response skipped")
+            continue
         dataset.extend(data)
 
     print(f"writing dataset to {filename}...")
